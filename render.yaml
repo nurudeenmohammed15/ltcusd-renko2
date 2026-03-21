@@ -1,0 +1,19 @@
+services:
+  # ── Background worker — runs cloud_feeder.py 24/7 ──────────────────────
+  - type: worker
+    name: ltcusdt-feeder
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python render_feeder.py
+    plan: free
+
+  # ── Web service — serves the chart to your phone ────────────────────────
+  - type: web
+    name: ltcusdt-chart
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python web_server.py
+    plan: free
+    envVars:
+      - key: PORT
+        value: 10000
